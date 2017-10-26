@@ -1,0 +1,21 @@
+.panel {
+  width: 90%;
+  margin: 50px auto;
+  text-align: left;
+}
+
+.panel .panel-heading {
+  width: 100%;
+  height: 50px;
+  background-color: #f2dede;
+  color: #a94442;
+  border-radius: 5px 5px 0 0;
+  padding: 15px;
+}
+
+.panel .panel-body {
+  width: 100%;
+  background-color: #fff;
+  border-radius: 0 0 5px 5px;
+  padding: 15px;
+}

@@ -1,0 +1,31 @@
+.form-group {
+  float: left;
+  width: 50%; 
+}
+
+.form-group input {
+  display: block;
+  border: 1px solid black;
+  border-radius: 3px;
+  min-width: 80%;
+  padding: 5px;
+  margin: 10px 0 25px;
+}
+
+.form-group #admin {
+  display: inline-block; 
+}
+
+.btn {
+  display: block;
+  border: 1px solid black;
+  border-radius: 3px;
+  padding: 10px;
+}
+
+@media only screen and (max-width: 480px) {
+  .form-group {
+    float: none;
+    width: 100%;
+  }
+}
