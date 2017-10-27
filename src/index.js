@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
-import TaskPage from './TaskPage'
+import TaskManager from './TaskManager'
 
-ReactDOM.render(<TaskPage/>, document.getElementById('root'));
+ReactDOM.render(<TaskManager/>, document.getElementById('root'));
 registerServiceWorker();

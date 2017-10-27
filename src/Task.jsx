@@ -1,8 +1,8 @@
 import React from 'react';
 
-const Task = ({assignment, key}) => {
+const Task = ({task}) => {
     return (
-        <li key={key}>{assignment.assignee}: {assignment.task}</li>
+        <li>{task}</li>
     );
 }
 

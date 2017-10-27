@@ -13,7 +13,8 @@
 }
 
 .form-group #admin {
-  display: inline-block; 
+  display: inline-block;
+  margin-left: 10px;
 }
 
 .btn {

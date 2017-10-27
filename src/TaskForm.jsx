@@ -1,9 +1,10 @@
 import React from 'react';
-import './form.css'
+import './form.css';
 
 class TaskForm extends React.Component {
     constructor(props){
         super(props);
+
         this.state = {
             task: '',
             assignee: ''
@@ -14,12 +15,12 @@ class TaskForm extends React.Component {
         this.sendTask = this.sendTask.bind(this);
     }
 
-    changeTask(e) {
-        this.setState({task: e.target.value});
-    }
-
     changeAssignee(e) {
         this.setState({assignee: e.target.value});
+    }
+
+    changeTask(e) {
+        this.setState({task: e.target.value});
     }
 
     sendTask(e) {
