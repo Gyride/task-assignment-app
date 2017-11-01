@@ -44,18 +44,13 @@ class AssignmentManager extends React.Component {
     }
 
     addAssignee(assignee) {
-        this.setState(function(){
-            if ( this.userExists(assignee.name) ) {
-                alert("That user already exists");
-                return {
-                    assignees: [...this.state.assignees]
-                }
-            } else {
-                return {
-                    assignees: [...this.state.assignees, assignee]
-                }
-            }
-        });
+        if ( !this.userExists(assignee.name) ) {
+            this.setState({
+                assignees: [...this.state.assignees, assignee]
+            });
+        } else {
+            alert("That user already exists");
+        }
     }
 
     changeAssignee(assignee) {
