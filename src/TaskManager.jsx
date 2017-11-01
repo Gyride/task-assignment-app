@@ -2,10 +2,10 @@ import React from 'react';
 import './panel.css';
 import AssigneeForm from './AssigneeForm';
 import AssigneeList from './AssigneeList';
-import TaskForm from './TaskForm';
-import TaskList from './TaskList';
+import AssignmentForm from './AssignmentForm';
+import AssignmentList from './AssignmentList';
 
-class TaskManager extends React.Component {
+class AssignmentManager extends React.Component {
     constructor(props){
         super(props);
 
@@ -13,59 +13,42 @@ class TaskManager extends React.Component {
             assignees: [
                 {
                     name: "Sebastian",
-                    pass: "Gyride",
-                    admin: true,
-                    tasks: ["Code", "Slap the Bass"]
+                    pass: "gyride"
+                },
+                {
+                    name: "Eddy",
+                    pass: "dumb"
+                }
+            ],
+            assignments: [
+                {
+                    assigned: ["Sebastian", "Eddy"],
+                    task: "Code"
+                },
+                {
+                    assigned: ["Sebastian"],
+                    task: "Slap the Bass"
                 }
             ],
             currentAssignee: "Sebastian"
-        };
+        }
 
         this.addAssignee = this.addAssignee.bind(this);
-        this.currentAssigneeTasks = this.currentAssigneeTasks.bind(this);
         this.changeAssignee = this.changeAssignee.bind(this);
-        this.addTask = this.addTask.bind(this);
-    }
-
-    addTask(assignment) {
-        this.setState(function(prevState, props){
-            const assignee = this.state.assignees.find(assignee => assignee.name === assignment.assignee);
-
-            if ( assignee ) {
-                const task = assignment.task;
-                const i = this.state.assignees.indexOf(assignee);
-
-                const newState = Object.assign({}, prevState);
-                newState.assignees[i].tasks.push(task);
-
-                return {
-                    newState
-                }
-            } else {
-                alert("That user does not exist")
-                return {
-                    
-                }
-            }
-        });
+        this.addAssignment = this.addAssignment.bind(this);
+        this.removeAssignment = this.removeAssignment.bind(this);
+        this.editAssignment = this.editAssignment.bind(this);
+        this.currentAssignments = this.currentAssignments.bind(this);
+        this.otherAssignees = this.otherAssignees.bind(this);        
+        this.userExists = this.userExists.bind(this);
     }
 
     addAssignee(assignee) {
-        this.setState(function(prevState, props) {
-            
-            function userExists(assignee) {
-                for( var i = 0; i < prevState.assignees.length; i++) {
-                    if ( prevState.assignees[i].name === assignee.name ) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            if ( userExists(assignee) ) {
-                alert("That username is already in use");
+        this.setState(function(){
+            if ( this.userExists(assignee.name) ) {
+                alert("That user already exists");
                 return {
-                    ...prevState
+                    assignees: [...this.state.assignees]
                 }
             } else {
                 return {
@@ -77,46 +60,99 @@ class TaskManager extends React.Component {
 
     changeAssignee(assignee) {
         this.setState({
-            currentAssignee: assignee
-        })
+            currentAssignee: assignee.name
+        });
     }
 
-    currentAssigneeTasks() {
-        return this.state.assignees.find(asignee => asignee.name === this.state.currentAssignee).tasks;
+    addAssignment(assignment) {
+        assignment.assigned = assignment.assigned.split(",");
+        this.setState({
+            assignments: [...this.state.assignments, assignment]
+        });
+    }
+
+    removeAssignment(assignment) {
+        this.setState({
+            assignments: this.state.assignments.filter( (stateAssignment) => {
+                return assignment.task !== stateAssignment.task;
+            })
+        });
+    }
+
+    editAssignment(oldAssignment, newAssignment) {
+        newAssignment.assigned = newAssignment.assigned.split(",");
+        let assignmentStateClone = this.state.assignments.slice(0);
+        let i = assignmentStateClone.indexOf( assignmentStateClone.find( (assignment) => {
+            return assignment.task === oldAssignment.task 
+        }));
+        assignmentStateClone[i] = newAssignment;
+
+        this.setState({
+            assignments: assignmentStateClone
+        });
+    }
+
+    currentAssignments() {
+        let currentAssignments = this.state.assignments.filter( (assignment) => {
+            return assignment.assigned.includes(this.state.currentAssignee)
+        });
+
+        return currentAssignments;
+    }
+
+    otherAssignees(assignment) {
+        let assignmentClone = Object.assign({}, assignment);
+        assignmentClone.assigned = assignmentClone.assigned.filter( (assignee) => {
+            return assignee !== this.state.currentAssignee;
+        });
+
+        if (assignmentClone.assigned.length > 0) {
+            var assigneesString = assignmentClone.assigned.join(',');
+            return '/Other Assignees: ' + assigneesString;
+        }
+    }
+
+    userExists(name) {
+        return this.state.assignees.some( (assignee) => assignee.name === name );
     }
 
     render() {
+        console.log(this.state.assignments);
         return (
-            <div className="TaskManager">
+            <div className="AssignmentManager">
                 <nav>
-                    <h1>Task Manager</h1>
+                    <h1>Assignment Manager</h1>
                 </nav>
 
                 <div className="panel">
                     <div className="panel-heading">Add a new user!</div>
                     <div className="panel-body">
-                        <AssigneeForm addAssignee={this.addAssignee} />
+                        <AssigneeForm addAssignee={this.addAssignee}/>
                     </div>
                 </div>
 
                 <div className="panel">
                     <div className="panel-heading">Users</div>
                     <div className="panel-body">
-                        <AssigneeList changeAssignee={this.changeAssignee} assignees={this.state.assignees} />
+                        <AssigneeList assignees={this.state.assignees}
+                                    changeAssignee={this.changeAssignee}/>
                     </div>
                 </div>
 
                 <div className="panel">
-                    <div className="panel-heading">Assign a new task!</div>
-                    <div className="panel-body">                                  
-                        <TaskForm addTask={this.addTask} />
-                    </div>
-                </div>
-
-                <div className="panel">
-                    <div className="panel-heading">{this.state.currentAssignee}'s tasks</div>
+                    <div className="panel-heading">Assign a new Assignment!</div>
                     <div className="panel-body">
-                        <TaskList tasks={this.currentAssigneeTasks()} />
+                        <AssignmentForm addAssignment={this.addAssignment}/>
+                    </div>
+                </div>
+
+                <div className="panel">
+                    <div className="panel-heading">{this.state.currentAssignee}'s Assignments</div>
+                    <div className="panel-body">
+                        <AssignmentList assignments={this.currentAssignments()}
+                                        otherAssignees={this.otherAssignees}
+                                        removeAssignment={this.removeAssignment}
+                                        editAssignment={this.editAssignment}/>
                     </div>
                 </div>
             </div>
@@ -124,4 +160,4 @@ class TaskManager extends React.Component {
     }
 }
 
-export default TaskManager;
+export default AssignmentManager;

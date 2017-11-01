@@ -1,8 +1,28 @@
 ul {
     padding-left: 15px;
-    max-width: 500px;
 }
 
-.assignee-list li:hover {
+ul li {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+ul li div {
+    min-width: 175px;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+ul li div .btn {
+    min-width: 75px
+}
+
+.assignee-list span:hover {
     cursor: pointer;
 }

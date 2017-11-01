@@ -24,6 +24,10 @@
   padding: 10px;
 }
 
+.btn:hover {
+  cursor: pointer;
+}
+
 @media only screen and (max-width: 480px) {
   .form-group {
     float: none;
